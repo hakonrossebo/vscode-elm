@@ -357,7 +357,12 @@ function removeDebugLog(range: vscode.Range) {
   editor.document.save();
 }
 
-export function activateCodeActions(): vscode.Disposable[] {
+function testElmWorker(elmWorker) {
+  elmWorker.ports.fromElm.subscribe(list => { vscode.window.showInformationMessage(list) });
+  elmWorker.ports.toElm.send("Hello Elm!");
+}
+
+export function activateCodeActions(elmWorker): vscode.Disposable[] {
   return [
     vscode.commands.registerCommand('elm.codeActionAnnotateFunction', msg =>
       annotateFunction(msg),
@@ -377,6 +382,9 @@ export function activateCodeActions(): vscode.Disposable[] {
     ),
     vscode.commands.registerCommand('elm.removeDebugLog', msg =>
       removeDebugLog(msg),
+    ),
+    vscode.commands.registerCommand('elm.testElmWorker', () =>
+      testElmWorker(elmWorker)
     ),
   ];
 }

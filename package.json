@@ -220,6 +220,10 @@
       {
         "command": "elm.analyseStop",
         "title": "Elm: Stop elm-analyse"
+      },
+      {
+        "command": "elm.testElmWorker",
+        "title": "Elm: Test info from Elm worker"
       }
     ],
     "outputChannels": [
@@ -282,17 +286,22 @@
   "main": "./out/src/elmMain",
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
-    "compile": "tsc -watch -p ./",
+    "compile": "npm-run-all elm:* tsc:*",
+    "elm:compile": "cd ./src/elm/ && chokidar '*.elm' -c 'elm make Main.elm --yes --output ../../out/src/elm-compiled.js' --initial",
+    "tsc-compile": "tsc -watch -p ./",
     "lint": "tslint \"src/*.ts\"",
     "test": "node ./node_modules/vscode/bin/test",
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {
+    "chokidar-cli": "^1.2.0",
     "typescript": "^2.4.0",
     "vscode": "1.1.0"
   },
   "dependencies": {
+    "elm": "^0.18.0",
     "elm-oracle": "^0.2.0",
+    "npm-run-all": "^4.0.2",
     "request": "^2.69.0",
     "rimraf": "^2.5.2",
     "tslint": "^5.4.3",

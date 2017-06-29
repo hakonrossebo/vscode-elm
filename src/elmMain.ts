@@ -18,11 +18,14 @@ import {ElmSymbolProvider} from './elmSymbol';
 import {ElmWorkspaceSymbolProvider} from './elmWorkspaceSymbols';
 import {configuration} from './elmConfiguration';
 
+let elmWorker;
+const Elm = require('./elm-compiled');
 const ELM_MODE: vscode.DocumentFilter = { language: 'elm', scheme: 'file' };
 const elmAnalyseIssues: IElmIssue[] = [];
 const elmAnalyse = new ElmAnalyse(elmAnalyseIssues);
 // this method is called when your extension is activated
 export function activate(ctx: vscode.ExtensionContext) {
+  elmWorker = Elm.Main.worker();
   const elmFormatStatusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
   ctx.subscriptions.push(vscode.workspace.onDidSaveTextDocument((document: vscode.TextDocument) => {
     runLinter(document, elmAnalyse);
@@ -35,8 +38,8 @@ export function activate(ctx: vscode.ExtensionContext) {
   activateMake().forEach((d: vscode.Disposable) => ctx.subscriptions.push(d));
   activatePackage().forEach((d: vscode.Disposable) => ctx.subscriptions.push(d));
   activateClean().forEach((d: vscode.Disposable) => ctx.subscriptions.push(d));
-  activateCodeActions().forEach((d: vscode.Disposable) => ctx.subscriptions.push(d));
   elmAnalyse.activateAnalyse().forEach((d: vscode.Disposable) => ctx.subscriptions.push(d));
+  activateCodeActions(elmWorker).forEach((d: vscode.Disposable) => ctx.subscriptions.push(d));
 
   let workspaceProvider = new ElmWorkspaceSymbolProvider(ELM_MODE);
 
