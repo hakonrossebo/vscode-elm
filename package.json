@@ -47,6 +47,11 @@
       "type": "object",
       "title": "Elm configuration",
       "properties": {
+        "elm.compiler": {
+          "type": "string",
+          "default": "elm",
+          "description": "Command to run when executing elm commands. Specify with full path when using other elm that default on system."
+        },
         "elm.reactorHost": {
           "type": "string",
           "default": "127.0.0.1",
@@ -148,7 +153,6 @@
           "type": "boolean",
           "default": false,
           "description": "Disable trying to detect elm-package from the current file and just use the VSCode workspace's root as the location of elm-package.json."
-
         }
       }
     },
