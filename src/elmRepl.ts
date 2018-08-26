@@ -11,9 +11,9 @@ function getReplAndArguments(): [string, string, string[]] {
   const config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration('elm');
   const dummyPath = path.join(vscode.workspace.rootPath, 'dummyfile');
   const name: string = <string>config.get('makeOutput');
-  const repl018Command: string = 'elm-repl'
+  const repl018Command: string = 'elm-repl';
   const compiler: string = <string>config.get('compiler');
-  const [cwd, elmVersion] = utils.detectProjectRootAndElmVersion(dummyPath, vscode.workspace.rootPath)
+  const [cwd, elmVersion] = utils.detectProjectRootAndElmVersion(dummyPath, vscode.workspace.rootPath);
   const args018 = [];
   const args019 = ['repl'];
   const args = utils.isElm019(elmVersion) ? args019 : args018;
